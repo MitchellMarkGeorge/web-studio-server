@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model WorkspaceSettings {
+  id Int @id @default(autoincrement())
+  livePreview Boolean @default(false)
+  layout String @default("colunm")
+  projectId Int @unique
+  project Project? @relation(fields: [projectId], references: [id])
+}
+
+model JavascriptSettings {
+  id Int @id @default(autoincrement())
+  preset String @default("ES6")
+  projectId Int @unique
+  project Project? @relation(fields: [projectId], references: [id])
+}
+
+model CSSSettings {
+  id Int @id @default(autoincrement())
+  preset String @default("CSS")
+  projectId Int @unique
+  project Project? @relation(fields: [projectId], references: [id])
+}
+
+model HTMLSettings {
+  id Int @id @default(autoincrement())
+  preset String @default("HTML")
+  projectId Int @unique
+  project Project? @relation(fields: [projectId], references: [id])
+}
+
+model EditorSettings {
+  id Int @id @default(autoincrement())
+  projectId Int @unique
+  lineNumbersEnabled Boolean @default(true)
+  bracketMatchingEnabled Boolean @default(true) 
+  closeBracketsEnabled Boolean @default(true)
+  autocompletionEnabled Boolean @default(false)
+  project Project? @relation(fields: [projectId], references: [id])
+}
+
+
+model Project {
+  id Int @id @default(autoincrement())
+  name String
+  enableJs Boolean @default(true)
+  javascriptCode String @default("")
+  cssCode String @default("")
+  htmlCode String @default("")
+  javascriptSettings JavascriptSettings? 
+  cssSettings CSSSettings?
+  htmlSettings HTMLSettings?
+  workspaceSettings WorkspaceSettings? // should not be null
+  editorSettings EditorSettings?
+  // createdAt, updatedAt
+}
+
+
