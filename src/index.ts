@@ -102,9 +102,11 @@ app.put("/project/:projectId/settings", async (req, res) => {
 app.get("/project/:projectId/preview", async (req, res) => {
     console.log("rendering project");
   const { projectId } = req.params;
+  // should build the project if it not found
   res.sendFile(projectFileBuilder.getProjectFilePath(projectId));
 });
 
 app.listen(8000, () => {
+    projectFileBuilder.buildProject({ projectId: "1", css: "", html: "", js: ""});
     console.log("Server started");
 })
